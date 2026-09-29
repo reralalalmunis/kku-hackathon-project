@@ -14,6 +14,10 @@
       brandLabel: "Retal Mohammed — home",
       languageAction: "Switch website language to Arabic",
       languageToggle: "العربية",
+      switchToDarkTheme: "Switch to dark mode",
+      switchToLightTheme: "Switch to light mode",
+      darkThemeActive: "Dark mode is now active.",
+      lightThemeActive: "Light mode is now active.",
       openMenu: "Open navigation menu",
       closeMenu: "Close navigation menu",
       primaryNavigation: "Primary navigation",
@@ -60,6 +64,10 @@
       brandLabel: arabicName + " — الرئيسية",
       languageAction: "تغيير لغة الموقع إلى الإنجليزية",
       languageToggle: "English",
+      switchToDarkTheme: "التبديل إلى الوضع الداكن",
+      switchToLightTheme: "التبديل إلى الوضع الفاتح",
+      darkThemeActive: "تم تفعيل الوضع الداكن.",
+      lightThemeActive: "تم تفعيل الوضع الفاتح.",
       openMenu: "فتح قائمة التنقل",
       closeMenu: "إغلاق قائمة التنقل",
       primaryNavigation: "التنقل الرئيسي",
@@ -104,6 +112,7 @@
 
   const root = document.documentElement;
   const languageToggle = document.querySelector("#language-toggle");
+  const themeToggle = document.querySelector("#theme-toggle");
   const menuToggle = document.querySelector("#menu-toggle");
   const navigation = document.querySelector("#primary-navigation");
   const statusMessage = document.querySelector("#status-message");
@@ -111,6 +120,7 @@
   const sectionHost = document.querySelector("#portfolio-sections");
   const portfolioData = window.PORTFOLIO_DATA;
   let currentLanguage = "en";
+  let currentTheme = "light";
 
   function makeElement(tagName, className = "") {
     const element = document.createElement(tagName);
@@ -444,6 +454,36 @@
     menuToggle.setAttribute("aria-label", translations[currentLanguage].closeMenu);
   }
 
+  function updateThemeToggle() {
+    const isDark = currentTheme === "dark";
+    const locale = translations[currentLanguage];
+    const sunIcon = themeToggle.querySelector('[data-theme-icon="sun"]');
+    const moonIcon = themeToggle.querySelector('[data-theme-icon="moon"]');
+
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+    themeToggle.setAttribute("aria-label", isDark ? locale.switchToLightTheme : locale.switchToDarkTheme);
+    sunIcon.hidden = !isDark;
+    moonIcon.hidden = isDark;
+  }
+
+  function applyTheme(theme, { announce = false } = {}) {
+    currentTheme = theme === "dark" ? "dark" : "light";
+    root.dataset.theme = currentTheme;
+    updateThemeToggle();
+
+    try {
+      window.sessionStorage.setItem("retal-portfolio-theme", currentTheme);
+    } catch {
+      // The page remains usable when browser storage is unavailable.
+    }
+
+    if (announce) {
+      statusMessage.textContent = currentTheme === "dark"
+        ? translations[currentLanguage].darkThemeActive
+        : translations[currentLanguage].lightThemeActive;
+    }
+  }
+
   function applyLanguage(language, { announce = false } = {}) {
     const locale = translations[language];
     currentLanguage = language;
@@ -475,6 +515,7 @@
 
     languageToggle.setAttribute("aria-pressed", String(language === "ar"));
     languageToggle.setAttribute("aria-label", locale.languageAction);
+    updateThemeToggle();
     menuToggle.setAttribute(
       "aria-label",
       navigation.classList.contains("is-open") ? locale.closeMenu : locale.openMenu
@@ -496,6 +537,10 @@
 
   languageToggle.addEventListener("click", () => {
     applyLanguage(currentLanguage === "en" ? "ar" : "en", { announce: true });
+  });
+
+  themeToggle.addEventListener("click", () => {
+    applyTheme(currentTheme === "light" ? "dark" : "light", { announce: true });
   });
 
   menuToggle.addEventListener("click", () => {
@@ -741,5 +786,16 @@
     // Use English if storage cannot be read.
   }
 
+  let savedTheme = "light";
+  try {
+    const storedTheme = window.sessionStorage.getItem("retal-portfolio-theme");
+    if (storedTheme === "light" || storedTheme === "dark") {
+      savedTheme = storedTheme;
+    }
+  } catch {
+    // Use light mode if session storage cannot be read.
+  }
+
   applyLanguage(savedLanguage);
+  applyTheme(savedTheme);
 })();
