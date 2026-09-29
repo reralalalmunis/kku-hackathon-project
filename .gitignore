@@ -1,0 +1,47 @@
+.env
+.env.*
+!.env.example
+node_modules/
+venv/
+.venv/
+__pycache__/
+.DS_Store
+
+# Private personal files and common document/image exports
+*.pdf
+*.doc
+*.docx
+*.pages
+*.key
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+*.csv
+*.zip
+*.rar
+*.7z
+*.psd
+*.ai
+*.sketch
+*.fig
+*.heic
+*.mov
+*.mp4
+*.webm
+
+# Screenshots and operating-system captures
+Screenshot*
+screenshot*
+Screen Shot*
+*.tmp
+*.bak
+*~
+*.log
+setup-log.txt
+
+# Local Claude configuration and session artifacts
+.claude/
+
+# Only add intentional website assets in images/ or assets/.
+# Do not store personal CV files in this project folder.
