@@ -37,6 +37,12 @@
       profileAction: "Explore My Profile",
       experienceAction: "View Experience",
       cvAction: "Print / Save PDF",
+      cvExperience: "Experience",
+      cvEducation: "Education",
+      cvCertifications: "Professional Certifications",
+      cvSkills: "Selected Skills",
+      cvLanguages: "Languages",
+      cvPreparationError: "The one-page CV could not be prepared. Please try again.",
       portfolioHighlights: "Portfolio highlights",
       initiativeFiles: "Initiative & Proposal Files",
       ideasDeveloped: "Ideas Developed in Detail",
@@ -77,6 +83,12 @@
       profileAction: "استكشف الملف المهني",
       experienceAction: "عرض الخبرات",
       cvAction: "طباعة / حفظ PDF",
+      cvExperience: "الخبرات",
+      cvEducation: "التعليم",
+      cvCertifications: "الشهادات المهنية",
+      cvSkills: "المهارات المختارة",
+      cvLanguages: "اللغات",
+      cvPreparationError: "تعذّر إعداد السيرة الذاتية في صفحة واحدة. يرجى المحاولة مرة أخرى.",
       portfolioHighlights: "أبرز أعمال المبادرات والمقترحات",
       initiativeFiles: "ملفًا للمبادرات والمقترحات",
       ideasDeveloped: "فكرة مطوّرة بالتفصيل",
@@ -506,8 +518,217 @@
     }
   });
 
-  document.querySelector("#print-cv").addEventListener("click", () => {
-    window.print();
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function getCvData(language) {
+    const content = portfolioData.stepTwo;
+    const localized = (value) => value[language];
+    const responsibilityIndexes = [[0, 1], [0, 1]];
+    const skillIndexes = [0, 1, 2, 3, 5, 6, 8];
+
+    return {
+      locale: translations[language],
+      language,
+      name: translations[language].name,
+      role: translations[language].role,
+      summary: translations[language].summary,
+      experience: content.experience.items.map((entry, index) => ({
+        organization: localized(entry.organization),
+        unit: localized(entry.unit),
+        area: localized(entry.area),
+        period: localized(entry.period),
+        responsibilities: responsibilityIndexes[index].map((itemIndex) => localized(entry.responsibilities[itemIndex]))
+      })),
+      education: content.education.items.map((entry) => ({
+        heading: localized(entry.heading),
+        institution: localized(entry.institution),
+        details: entry.details.map(localized)
+      })),
+      certifications: content.development.certifications.map((entry) => ({
+        title: localized(entry.title),
+        details: entry.details.map((detail) => ({
+          label: localized(detail.label),
+          value: localized(detail.value)
+        }))
+      })),
+      skills: skillIndexes.map((index) => localized(content.skills.professional[index])),
+      languages: content.languages.items.map((entry) => ({
+        name: localized(entry.name),
+        level: localized(entry.level)
+      }))
+    };
+  }
+
+  function renderCvDocument(data) {
+    const list = (items, className = "") => `<ul class="${className}">${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+    const experience = data.experience.map((entry) => `
+      <article class="experience-entry">
+        <h3>${escapeHtml(entry.unit)}</h3>
+        <p class="metadata"><span>${escapeHtml(entry.organization)}</span><time>${escapeHtml(entry.period)}</time></p>
+        <p class="area">${escapeHtml(entry.area)}</p>
+        ${list(entry.responsibilities, "responsibilities")}
+      </article>`).join("");
+    const education = data.education.map((entry) => `
+      <article class="compact-entry">
+        <h3>${escapeHtml(entry.heading)}</h3>
+        <p>${escapeHtml(entry.institution)}</p>
+        ${list(entry.details, "detail-list")}
+      </article>`).join("");
+    const certifications = data.certifications.map((entry) => `
+      <article class="compact-entry certification-entry">
+        <h3>${escapeHtml(entry.title)}</h3>
+        ${entry.details.map((detail) => `<p><strong>${escapeHtml(detail.label)}:</strong> ${escapeHtml(detail.value)}</p>`).join("")}
+      </article>`).join("");
+    const languages = data.languages.map((entry) => `<li><strong>${escapeHtml(entry.name)}</strong><span>${escapeHtml(entry.level)}</span></li>`).join("");
+    const direction = data.language === "ar" ? "rtl" : "ltr";
+
+    return `<!doctype html>
+<html lang="${data.language}" dir="${direction}">
+<head>
+<meta charset="utf-8">
+<title>${escapeHtml(data.name)} - CV</title>
+<style>
+  @page { size: A4 portrait; margin: 0; }
+  :root { --ink: #102d43; --navy: #0b2942; --blue: #164f78; --line: #c5d9e6; }
+  * { box-sizing: border-box; }
+  html, body { width: 210mm; min-height: 297mm; margin: 0; background: #fff; color: var(--ink); }
+  body { font-family: Arial, "Segoe UI", sans-serif; font-size: 9.3pt; line-height: 1.3; }
+  html[lang="ar"] body { font-family: Tahoma, "Segoe UI", Arial, sans-serif; line-height: 1.35; }
+  .cv-page { width: 210mm; height: 297mm; padding: 11mm 12mm; background: #fff; }
+  .cv-content { height: 275mm; }
+  .cv-header { padding-block-end: 3mm; border-block-end: 1.4pt solid var(--blue); }
+  h1, h2, h3, p { margin: 0; }
+  h1 { color: var(--navy); font-size: 22pt; letter-spacing: -0.03em; line-height: 1.05; }
+  html[lang="ar"] h1 { letter-spacing: 0; line-height: 1.2; }
+  .role { margin-block-start: 1.25mm; color: var(--blue); font-size: 11.2pt; font-weight: 700; }
+  .summary { margin-block: 3mm 3.5mm; color: var(--ink); }
+  .cv-grid { display: grid; grid-template-columns: minmax(0, 1.34fr) minmax(45mm, 0.86fr); gap: 5mm; }
+  section + section { margin-block-start: 3.3mm; }
+  h2 { margin-block-end: 1.7mm; color: var(--blue); font-size: 8.6pt; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; break-after: avoid-page; }
+  html[lang="ar"] h2 { letter-spacing: 0; text-transform: none; }
+  h3 { color: var(--navy); font-size: 9.4pt; line-height: 1.22; }
+  .experience-entry, .compact-entry { break-inside: avoid-page; }
+  .experience-entry + .experience-entry, .compact-entry + .compact-entry { margin-block-start: 2.5mm; }
+  .metadata { display: flex; justify-content: space-between; gap: 2mm; margin-block-start: 0.65mm; color: var(--blue); font-size: 8.5pt; font-weight: 700; }
+  .metadata time { unicode-bidi: plaintext; white-space: nowrap; }
+  .area { margin-block-start: 0.5mm; color: #465e70; font-size: 8.35pt; }
+  ul { padding: 0; margin: 0; list-style: none; }
+  .responsibilities { display: grid; gap: 0.75mm; margin-block-start: 1.1mm; color: #243f54; }
+  .responsibilities li { position: relative; padding-inline-start: 3.2mm; }
+  .responsibilities li::before { position: absolute; inset-block-start: 0.55em; inset-inline-start: 0; width: 1.2mm; height: 1.2mm; border-radius: 50%; background: var(--blue); content: ""; }
+  .compact-entry > p { margin-block-start: 0.55mm; color: #465e70; }
+  .detail-list { display: grid; gap: 0.45mm; margin-block-start: 0.7mm; color: #465e70; }
+  .certification-entry p { font-size: 8.35pt; }
+  .skill-list { display: flex; flex-wrap: wrap; gap: 1.15mm; }
+  .skill-list li { padding: 0.7mm 1.2mm; border: 0.7pt solid var(--line); border-radius: 99px; color: #243f54; font-size: 8.1pt; line-height: 1.2; }
+  .language-list { display: grid; gap: 1mm; }
+  .language-list li { display: flex; justify-content: space-between; gap: 2mm; padding-block-end: 0.85mm; border-block-end: 0.7pt solid var(--line); }
+  .language-list span { color: #465e70; }
+  .cv-page[data-density="compact"] { font-size: 8.8pt; }
+  .cv-page[data-density="compact"] .cv-content { height: 275mm; }
+  .cv-page[data-density="compact"] .summary { margin-block: 2.3mm 2.6mm; }
+  .cv-page[data-density="compact"] .cv-grid { gap: 3.5mm; }
+  .cv-page[data-density="compact"] section + section { margin-block-start: 2.4mm; }
+  .cv-page[data-density="compact"] .experience-entry + .experience-entry, .cv-page[data-density="compact"] .compact-entry + .compact-entry { margin-block-start: 1.8mm; }
+  .cv-page[data-density="tight"] { font-size: 8.3pt; }
+  .cv-page[data-density="tight"] h1 { font-size: 20pt; }
+  .cv-page[data-density="tight"] .role { font-size: 10.2pt; }
+  .cv-page[data-density="tight"] .summary { margin-block: 1.8mm 2mm; }
+  .cv-page[data-density="tight"] .cv-grid { gap: 3mm; }
+  .cv-page[data-density="tight"] section + section { margin-block-start: 1.9mm; }
+  .cv-page[data-density="tight"] h2 { margin-block-end: 1mm; }
+  .cv-page[data-density="tight"] .experience-entry + .experience-entry, .cv-page[data-density="tight"] .compact-entry + .compact-entry { margin-block-start: 1.4mm; }
+  .cv-page[data-density="tight"] .responsibilities { gap: 0.4mm; margin-block-start: 0.7mm; }
+  @media print { html, body { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<main class="cv-page" data-density="standard">
+  <div class="cv-content">
+    <header class="cv-header"><h1>${escapeHtml(data.name)}</h1><p class="role">${escapeHtml(data.role)}</p></header>
+    <p class="summary">${escapeHtml(data.summary)}</p>
+    <div class="cv-grid">
+      <div>
+        <section><h2>${escapeHtml(data.locale.cvExperience)}</h2>${experience}</section>
+        <section><h2>${escapeHtml(data.locale.cvEducation)}</h2>${education}</section>
+      </div>
+      <aside>
+        <section><h2>${escapeHtml(data.locale.cvCertifications)}</h2>${certifications}</section>
+        <section><h2>${escapeHtml(data.locale.cvSkills)}</h2>${list(data.skills, "skill-list")}</section>
+        <section><h2>${escapeHtml(data.locale.cvLanguages)}</h2><ul class="language-list">${languages}</ul></section>
+      </aside>
+    </div>
+  </div>
+</main>
+</body>
+</html>`;
+  }
+
+  function prepareCvForPrint(trigger) {
+    if (!portfolioData || !portfolioData.stepTwo) {
+      statusMessage.textContent = translations[currentLanguage].cvPreparationError;
+      return;
+    }
+
+    const frame = document.createElement("iframe");
+    const data = getCvData(currentLanguage);
+    let isCleanedUp = false;
+    const cleanup = () => {
+      if (isCleanedUp) {
+        return;
+      }
+
+      isCleanedUp = true;
+      frame.remove();
+      trigger.focus();
+    };
+
+    frame.setAttribute("aria-hidden", "true");
+    frame.tabIndex = -1;
+    frame.style.cssText = "position:fixed; inset-block-start:0; inset-inline-start:-220mm; width:210mm; height:297mm; border:0; opacity:0; pointer-events:none;";
+    frame.addEventListener("load", () => {
+      const frameWindow = frame.contentWindow;
+      const frameDocument = frame.contentDocument;
+      const page = frameDocument.querySelector(".cv-page");
+      const content = frameDocument.querySelector(".cv-content");
+      const densities = ["standard", "compact", "tight"];
+
+      const fitAndPrint = () => {
+        const density = densities.shift();
+        if (!density) {
+          cleanup();
+          statusMessage.textContent = translations[currentLanguage].cvPreparationError;
+          return;
+        }
+
+        page.dataset.density = density;
+        frameWindow.requestAnimationFrame(() => {
+          if (content.scrollHeight <= content.clientHeight + 1) {
+            frameWindow.addEventListener("afterprint", cleanup, { once: true });
+            frameWindow.focus();
+            frameWindow.print();
+            window.setTimeout(cleanup, 60000);
+          } else {
+            fitAndPrint();
+          }
+        });
+      };
+
+      frameWindow.requestAnimationFrame(() => frameWindow.requestAnimationFrame(fitAndPrint));
+    }, { once: true });
+    frame.srcdoc = renderCvDocument(data);
+    document.body.append(frame);
+  }
+
+  document.querySelector("#print-cv").addEventListener("click", (event) => {
+    prepareCvForPrint(event.currentTarget);
   });
 
   let savedLanguage = "en";
