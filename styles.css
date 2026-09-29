@@ -40,9 +40,7 @@ html {
 }
 
 body {
-  min-width: 20rem;
   margin: 0;
-  overflow-x: hidden;
   background: var(--canvas);
   color: var(--ink);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
@@ -1149,7 +1147,7 @@ html[dir="rtl"] .professional-geometry {
   }
 }
 
-@media (min-width: 68rem) {
+@media (min-width: 80rem) {
   .header-inner {
     flex-wrap: nowrap;
   }
@@ -1223,5 +1221,122 @@ html[dir="rtl"] .professional-geometry {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff;
+    color: #102d43;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .skip-link,
+  .site-header,
+  .hero-visual,
+  .hero-actions,
+  #contact,
+  #status-message {
+    display: none !important;
+  }
+
+  .hero {
+    display: block;
+    min-height: 0;
+    overflow: visible;
+    padding-block: 0 5mm;
+    background: #fff;
+  }
+
+  .hero::before {
+    display: none;
+  }
+
+  .page-shell {
+    width: auto;
+    padding-inline: 0;
+  }
+
+  .hero-copy {
+    max-width: none;
+  }
+
+  h1 {
+    max-width: none;
+    font-size: 28pt;
+    line-height: 1.05;
+  }
+
+  .eyebrow,
+  .role,
+  .focus-line,
+  .hero-summary,
+  .portfolio-highlights {
+    margin-block-start: 2.5mm;
+  }
+
+  .professional-focus {
+    margin-block-start: 4mm;
+    padding-block-start: 3mm;
+  }
+
+  .portfolio-section {
+    padding-block: 6mm;
+    background: #fff !important;
+  }
+
+  .section-shell > * + * {
+    margin-block-start: 4mm;
+  }
+
+  .section-header,
+  .group-heading {
+    break-after: avoid-page;
+  }
+
+  .experience-item,
+  .education-entry,
+  .credential-entry,
+  .training-entry,
+  .capability-entry,
+  .initiative-entry,
+  .published-work-entry,
+  .language-list li {
+    break-inside: avoid-page;
+  }
+
+  .experience-entry,
+  .capability-grid,
+  .language-list {
+    display: block;
+  }
+
+  .experience-entry > * + *,
+  .capability-entry + .capability-entry,
+  .language-list li + li {
+    margin-block-start: 2.5mm;
+  }
+
+  .credential-group + .credential-group {
+    margin-block-start: 6mm;
+  }
+
+  .experience-item,
+  .education-entry,
+  .training-entry,
+  .capability-entry,
+  .credential-entry,
+  .initiative-entry,
+  .published-work-entry,
+  .language-list li {
+    padding-block: 3mm;
+    box-shadow: none;
   }
 }

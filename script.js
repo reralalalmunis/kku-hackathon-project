@@ -36,7 +36,7 @@
       summary: "Government-sector experience with a focus on structured work, professional follow-up, and development of practical initiatives and proposals.",
       profileAction: "Explore My Profile",
       experienceAction: "View Experience",
-      cvAction: "Download CV",
+      cvAction: "Print / Save PDF",
       portfolioHighlights: "Portfolio highlights",
       initiativeFiles: "Initiative & Proposal Files",
       ideasDeveloped: "Ideas Developed in Detail",
@@ -46,10 +46,7 @@
       focusDecisionSupport: "Decision Support",
       focusStrategicPlanning: "Strategic Planning",
       focusInitiativeDevelopment: "Initiative Development",
-      languageChanged: "English is now active.",
-      profileNotice: "Profile will be available in Step 2.",
-      experienceNotice: "Experience will be available in Step 2.",
-      cvNotice: "Download CV will be available in Step 4."
+      languageChanged: "English is now active."
     },
     ar: {
       documentTitle: arabicName + " | الملف المهني",
@@ -79,7 +76,7 @@
       summary: "خبرة في القطاع الحكومي تركز على العمل المنظم والمتابعة المهنية وتطوير المبادرات والمقترحات العملية.",
       profileAction: "استكشف الملف المهني",
       experienceAction: "عرض الخبرات",
-      cvAction: "تنزيل السيرة الذاتية",
+      cvAction: "طباعة / حفظ PDF",
       portfolioHighlights: "أبرز أعمال المبادرات والمقترحات",
       initiativeFiles: "ملفًا للمبادرات والمقترحات",
       ideasDeveloped: "فكرة مطوّرة بالتفصيل",
@@ -89,10 +86,7 @@
       focusDecisionSupport: "دعم القرار",
       focusStrategicPlanning: "التخطيط الاستراتيجي",
       focusInitiativeDevelopment: "تطوير المبادرات",
-      languageChanged: "تم تفعيل اللغة العربية.",
-      profileNotice: "سيتوفر الملف المهني في الخطوة الثانية.",
-      experienceNotice: "ستتوفر الخبرات في الخطوة الثانية.",
-      cvNotice: "سيتوفر تنزيل السيرة الذاتية في الخطوة الرابعة."
+      languageChanged: "تم تفعيل اللغة العربية."
     }
   };
 
@@ -340,8 +334,6 @@
       localizedElement("span", data.item.type)
     );
     link.href = data.item.url;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
     link.append(localizedElement("span", data.item.linkLabel));
     work.append(localizedElement("h3", data.item.title), metadata, link);
     shell.append(work);
@@ -487,11 +479,6 @@
     }
   }
 
-  function showActionNotice(action) {
-    const locale = translations[currentLanguage];
-    statusMessage.textContent = locale[action + "Notice"];
-  }
-
   renderStepTwo();
   renderStepThree();
 
@@ -519,10 +506,8 @@
     }
   });
 
-  document.querySelectorAll(".hero-actions [data-pending]").forEach((button) => {
-    button.addEventListener("click", () => {
-      showActionNotice(button.dataset.pending);
-    });
+  document.querySelector("#print-cv").addEventListener("click", () => {
+    window.print();
   });
 
   let savedLanguage = "en";

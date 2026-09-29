@@ -34,14 +34,14 @@
       <nav class="primary-navigation" id="primary-navigation" aria-label="Primary navigation" data-i18n-aria-label="primaryNavigation">
         <ul>
           <li><a class="is-current" href="#home" aria-current="page" data-nav="home" data-i18n="navHome">Home</a></li>
-          <li><a href="#profile" data-pending="profile" data-i18n="navProfile">Profile</a></li>
-          <li><a href="#experience" data-pending="experience" data-i18n="navExperience">Experience</a></li>
-          <li><a href="#education" data-pending="education" data-i18n="navEducation">Education</a></li>
-          <li><a href="#skills" data-pending="skills" data-i18n="navSkills">Skills</a></li>
-          <li><a href="#certifications" data-pending="certifications" data-i18n="navCertifications">Certifications</a></li>
-          <li><a href="#initiatives" data-pending="initiatives" data-i18n="navInitiatives">Initiatives</a></li>
+          <li><a href="#profile" data-i18n="navProfile">Profile</a></li>
+          <li><a href="#experience" data-i18n="navExperience">Experience</a></li>
+          <li><a href="#education" data-i18n="navEducation">Education</a></li>
+          <li><a href="#skills" data-i18n="navSkills">Skills</a></li>
+          <li><a href="#certifications" data-i18n="navCertifications">Certifications</a></li>
+          <li><a href="#initiatives" data-i18n="navInitiatives">Initiatives</a></li>
           <li><a href="#published-work" data-i18n="navPublishedWork">Published Work</a></li>
-          <li><a href="#contact" data-pending="contact" data-i18n="navContact">Contact</a></li>
+          <li><a href="#contact" data-i18n="navContact">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -58,9 +58,9 @@
           <p class="hero-summary" data-i18n="summary">Government-sector experience with a focus on structured work, professional follow-up, and development of practical initiatives and proposals.</p>
 
           <div class="hero-actions" aria-label="Profile actions" data-i18n-aria-label="heroActions">
-            <button class="button button-primary" type="button" data-pending="profile" data-i18n="profileAction">Explore My Profile</button>
-            <button class="button button-secondary" type="button" data-pending="experience" data-i18n="experienceAction">View Experience</button>
-            <button class="button button-tertiary" type="button" data-pending="cv" data-i18n="cvAction">Download CV</button>
+            <a class="button button-primary" href="#profile" data-i18n="profileAction">Explore My Profile</a>
+            <a class="button button-secondary" href="#experience" data-i18n="experienceAction">View Experience</a>
+            <button class="button button-tertiary" id="print-cv" type="button" data-i18n="cvAction">Print / Save PDF</button>
           </div>
 
           <ul class="portfolio-highlights" aria-label="Portfolio highlights" data-i18n-aria-label="portfolioHighlights">
@@ -113,7 +113,7 @@
       </div>
 
       <div class="professional-focus page-shell" aria-labelledby="professional-focus-heading">
-        <p class="focus-kicker" id="professional-focus-heading" data-i18n="professionalFocus">Professional Focus</p>
+        <h2 class="focus-kicker" id="professional-focus-heading" data-i18n="professionalFocus">Professional Focus</h2>
         <ul class="focus-list">
           <li data-i18n="focusAdministration">Administration</li>
           <li data-i18n="focusProjectManagement">Project Management</li>
