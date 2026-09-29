@@ -57,7 +57,9 @@ html[lang="ar"] body {
 }
 
 button,
-a {
+a,
+input,
+textarea {
   font: inherit;
 }
 
@@ -77,6 +79,8 @@ a[href] {
 
 button:focus-visible,
 a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
 summary:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
@@ -951,8 +955,7 @@ html[lang="ar"] .focus-kicker {
 
 .initiative-public-title,
 .initiative-status,
-.published-work-meta,
-.contact-details {
+.published-work-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
@@ -969,8 +972,7 @@ html[lang="ar"] .focus-kicker {
   margin-block-start: var(--space-3);
 }
 
-.published-work-entry a,
-.contact-email {
+.published-work-entry a {
   display: inline-block;
   margin-block-start: var(--space-4);
   color: var(--deep-blue);
@@ -980,16 +982,42 @@ html[lang="ar"] .focus-kicker {
   text-underline-offset: 0.2em;
 }
 
-.contact-details {
-  align-items: baseline;
+.contact-form {
+  display: grid;
+  gap: var(--space-5);
   max-width: 48rem;
-  padding-block-end: var(--space-4);
-  border-block-end: 1px solid var(--border);
 }
 
-.contact-email {
-  margin-block-start: 0;
-  unicode-bidi: plaintext;
+.contact-field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.contact-control {
+  inline-size: 100%;
+  min-block-size: 2.9rem;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: start;
+}
+
+textarea.contact-control {
+  min-block-size: 10rem;
+  resize: vertical;
+}
+
+.contact-privacy-note {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.9rem;
+}
+
+.contact-submit {
+  justify-self: start;
 }
 
 html[lang="ar"] .section-kicker,

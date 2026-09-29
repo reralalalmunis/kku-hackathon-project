@@ -350,14 +350,46 @@
 
   function renderContact(data) {
     const { section, shell } = createSection("contact", data);
-    const details = makeElement("p", "contact-details");
-    const label = localizedElement("span", data.emailLabel, "meta-label");
-    const email = makeElement("a", "contact-email");
+    const form = makeElement("form", "contact-form");
+    const fields = [
+      { id: "contact-full-name", name: "full-name", type: "text", label: data.fullNameLabel, required: true, autocomplete: "name" },
+      { id: "contact-email-address", name: "email-address", type: "email", label: data.emailAddressLabel, required: true, autocomplete: "email" },
+      { id: "contact-phone-number", name: "phone-number", type: "tel", label: data.phoneNumberLabel, autocomplete: "tel" },
+      { id: "contact-subject", name: "subject", type: "text", label: data.subjectLabel, required: true },
+      { id: "contact-message", name: "message", tag: "textarea", label: data.messageLabel, required: true }
+    ];
 
-    email.href = `mailto:${data.email}`;
-    email.textContent = data.email;
-    details.append(label, email);
-    shell.append(details);
+    fields.forEach((field) => {
+      const fieldGroup = makeElement("div", "contact-field");
+      const label = localizedElement("label", field.label, "meta-label");
+      const control = makeElement(field.tag || "input", "contact-control");
+
+      label.htmlFor = field.id;
+      control.id = field.id;
+      control.name = field.name;
+      control.dir = "auto";
+      control.required = Boolean(field.required);
+
+      if (field.tag === "textarea") {
+        control.rows = 6;
+      } else {
+        control.type = field.type;
+        if (field.autocomplete) {
+          control.autocomplete = field.autocomplete;
+        }
+      }
+
+      fieldGroup.append(label, control);
+      form.append(fieldGroup);
+    });
+
+    const submit = localizedElement("button", data.submitLabel, "button button-primary contact-submit");
+    submit.type = "submit";
+    form.append(submit, localizedElement("p", data.privacyNote, "contact-privacy-note"));
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+    });
+    shell.append(form);
     return section;
   }
 

@@ -237,8 +237,16 @@
       contact: {
         eyebrow: text("Contact", "التواصل"),
         heading: text("Contact", "التواصل"),
-        emailLabel: text("Email", "البريد الإلكتروني"),
-        email: "retalalalmonus@gmail.com"
+        fullNameLabel: text("Full Name", "الاسم الكامل"),
+        emailAddressLabel: text("Email Address", "البريد الإلكتروني"),
+        phoneNumberLabel: text("Phone Number (Optional)", "رقم الجوال (اختياري)"),
+        subjectLabel: text("Subject / Reason for Contact", "موضوع / سبب التواصل"),
+        messageLabel: text("Message", "الرسالة"),
+        submitLabel: text("Send Message", "إرسال الرسالة"),
+        privacyNote: text(
+          "Your information will only be used to respond to your inquiry and will not be displayed publicly.",
+          "ستُستخدم بياناتك فقط للرد على استفسارك ولن يتم عرضها بشكل علني."
+        )
       }
     }
   });
