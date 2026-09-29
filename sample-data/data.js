@@ -184,6 +184,62 @@
           text("Committed to continuous development", "حريصة على التطوير المستمر")
         ]
       }
+    },
+    stepThree: {
+      initiatives: {
+        eyebrow: text("Initiatives & Proposals", "المبادرات والمقترحات"),
+        heading: text("Initiatives & Proposals", "المبادرات والمقترحات"),
+        introduction: text(
+          "A growing body of initiative and proposal work focused on development, innovation, institutional improvement, services, and community-oriented ideas.",
+          "مجموعة متنامية من أعمال المبادرات والمقترحات التي تركز على التنمية والابتكار والتطوير المؤسسي والخدمات والأفكار الموجهة للمجتمع."
+        ),
+        volumes: [
+          text("17 Initiative & Proposal Files", "17 ملفًا للمبادرات والمقترحات"),
+          text("30 Ideas Developed in Detail", "30 فكرة مطوّرة بالتفصيل"),
+          text("Additional Concepts Under Development", "مفاهيم إضافية قيد التطوير")
+        ],
+        areasLabel: text("Areas of work", "مجالات العمل"),
+        areas: [
+          text("Identifying opportunities and problems", "تحديد الفرص والمشكلات"),
+          text("Developing structured ideas", "تطوير أفكار منظمة"),
+          text("Researching concepts", "بحث المفاهيم"),
+          text("Analyzing information", "تحليل المعلومات"),
+          text("Structuring proposals", "هيكلة المقترحات"),
+          text("Preparing professional presentations", "إعداد العروض التقديمية المهنية"),
+          text("Organizing ideas into proposal formats", "تنظيم الأفكار ضمن صيغ المقترحات"),
+          text("Institutional and community development thinking", "التفكير في التطوير المؤسسي والمجتمعي"),
+          text("Exploring innovative solutions", "استكشاف الحلول المبتكرة"),
+          text("Translating observations into structured initiatives", "تحويل الملاحظات إلى مبادرات منظمة")
+        ],
+        featuredLabel: text("Featured Development Initiative", "مبادرة تنموية مختارة"),
+        item: {
+          publicTitleLabel: text("Public Title", "العنوان العام"),
+          title: text("Development & Safety in Mountainous Environments", "التنمية والسلامة في البيئات الجبلية"),
+          description: text(
+            "A proposed development concept focused broadly on supporting safety and development in mountainous environments.",
+            "مفهوم تنموي مقترح يركز بصورة عامة على دعم السلامة والتنمية في البيئات الجبلية."
+          ),
+          statusLabel: text("Status", "الحالة"),
+          status: text("Under Study", "قيد الدراسة")
+        }
+      },
+      publishedWork: {
+        eyebrow: text("Published Work", "الأعمال المنشورة"),
+        heading: text("Published Work", "الأعمال المنشورة"),
+        item: {
+          title: text("Breakthrough Author Live", "Breakthrough Author Live"),
+          typeLabel: text("Type", "النوع"),
+          type: text("Web Landing Page", "صفحة هبوط ويب"),
+          url: "https://reralalalmunis.github.io/breakthrough-author-live/",
+          linkLabel: text("Visit published project", "زيارة المشروع المنشور")
+        }
+      },
+      contact: {
+        eyebrow: text("Contact", "التواصل"),
+        heading: text("Contact", "التواصل"),
+        emailLabel: text("Email", "البريد الإلكتروني"),
+        email: "retalalalmonus@gmail.com"
+      }
     }
   });
 })();

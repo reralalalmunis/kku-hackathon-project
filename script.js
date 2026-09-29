@@ -27,6 +27,7 @@
       navSkills: "Skills",
       navCertifications: "Certifications",
       navInitiatives: "Initiatives",
+      navPublishedWork: "Published Work",
       navContact: "Contact",
       eyebrow: "Certified Business Professional",
       name: "Retal Mohammed",
@@ -69,6 +70,7 @@
       navSkills: "المهارات",
       navCertifications: "الشهادات",
       navInitiatives: "المبادرات",
+      navPublishedWork: "الأعمال المنشورة",
       navContact: "التواصل",
       eyebrow: "محترف أعمال معتمد",
       name: arabicName,
@@ -297,6 +299,68 @@
     return section;
   }
 
+  function renderInitiatives(data) {
+    const { section, shell } = createSection("initiatives", data);
+    const introduction = localizedElement("p", data.introduction, "initiative-introduction");
+    const volumeList = makeElement("ul", "initiative-volume-list");
+    const workHeading = localizedElement("h3", data.areasLabel, "group-heading");
+    const featuredHeading = localizedElement("h3", data.featuredLabel, "group-heading");
+    const featured = makeElement("article", "initiative-entry");
+    const publicTitle = makeElement("p", "initiative-public-title");
+    const publicTitleLabel = localizedElement("span", data.item.publicTitleLabel, "meta-label");
+    const status = makeElement("p", "initiative-status");
+    const statusLabel = localizedElement("span", data.item.statusLabel, "meta-label");
+
+    data.volumes.forEach((volume) => {
+      volumeList.append(localizedElement("li", volume));
+    });
+
+    publicTitle.append(publicTitleLabel, localizedElement("span", data.item.title));
+    status.append(statusLabel, localizedElement("span", data.item.status));
+    featured.append(
+      publicTitle,
+      localizedElement("h4", data.item.title),
+      localizedElement("p", data.item.description, "initiative-summary"),
+      status
+    );
+    shell.append(introduction, volumeList, workHeading);
+    appendTextList(shell, data.areas, "initiative-area-list");
+    shell.append(featuredHeading, featured);
+    return section;
+  }
+
+  function renderPublishedWork(data) {
+    const { section, shell } = createSection("published-work", data);
+    const work = makeElement("article", "published-work-entry");
+    const metadata = makeElement("p", "published-work-meta");
+    const link = document.createElement("a");
+
+    metadata.append(
+      localizedElement("span", data.item.typeLabel, "meta-label"),
+      localizedElement("span", data.item.type)
+    );
+    link.href = data.item.url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.append(localizedElement("span", data.item.linkLabel));
+    work.append(localizedElement("h3", data.item.title), metadata, link);
+    shell.append(work);
+    return section;
+  }
+
+  function renderContact(data) {
+    const { section, shell } = createSection("contact", data);
+    const details = makeElement("p", "contact-details");
+    const label = localizedElement("span", data.emailLabel, "meta-label");
+    const email = makeElement("a", "contact-email");
+
+    email.href = `mailto:${data.email}`;
+    email.textContent = data.email;
+    details.append(label, email);
+    shell.append(details);
+    return section;
+  }
+
   function renderStepTwo() {
     if (!portfolioData || !portfolioData.stepTwo || !sectionHost) {
       return;
@@ -312,6 +376,19 @@
       renderSkills(data.skills),
       renderLanguages(data.languages),
       renderCharacteristics(data.characteristics)
+    );
+  }
+
+  function renderStepThree() {
+    if (!portfolioData || !portfolioData.stepThree || !sectionHost) {
+      return;
+    }
+
+    const data = portfolioData.stepThree;
+    sectionHost.append(
+      renderInitiatives(data.initiatives),
+      renderPublishedWork(data.publishedWork),
+      renderContact(data.contact)
     );
   }
 
@@ -384,6 +461,7 @@
   }
 
   renderStepTwo();
+  renderStepThree();
 
   languageToggle.addEventListener("click", () => {
     applyLanguage(currentLanguage === "en" ? "ar" : "en", { announce: true });

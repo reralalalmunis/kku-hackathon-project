@@ -888,6 +888,110 @@ html[lang="ar"] .focus-kicker {
   font-size: 0.9rem;
 }
 
+.initiative-introduction,
+.initiative-summary {
+  max-width: 48rem;
+  margin: 0;
+  color: var(--muted-ink);
+}
+
+.initiative-volume-list,
+.initiative-area-list {
+  display: grid;
+  gap: var(--space-2);
+  max-width: 48rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.initiative-volume-list {
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--space-3);
+}
+
+.initiative-volume-list li {
+  padding-block-end: var(--space-3);
+  border-block-end: 1px solid var(--border);
+  color: var(--deep-blue);
+  font-weight: 720;
+}
+
+.initiative-area-list li {
+  position: relative;
+  padding-inline-start: 1rem;
+  color: var(--muted-ink);
+}
+
+.initiative-area-list li::before {
+  position: absolute;
+  inset-block-start: 0.7em;
+  inset-inline-start: 0;
+  width: 0.32rem;
+  height: 0.32rem;
+  border-radius: 50%;
+  background: var(--soft-blue);
+  content: "";
+}
+
+.initiative-entry,
+.published-work-entry {
+  max-width: 48rem;
+  padding-block: var(--space-5);
+  border-block: 1px solid var(--border);
+}
+
+.initiative-entry h4,
+.published-work-entry h3 {
+  margin: var(--space-2) 0 0;
+  color: var(--navy);
+  font-size: 1.2rem;
+  line-height: 1.35;
+}
+
+.initiative-public-title,
+.initiative-status,
+.published-work-meta,
+.contact-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0;
+  color: var(--muted-ink);
+}
+
+.initiative-status,
+.published-work-meta {
+  margin-block-start: var(--space-3);
+}
+
+.initiative-summary {
+  margin-block-start: var(--space-3);
+}
+
+.published-work-entry a,
+.contact-email {
+  display: inline-block;
+  margin-block-start: var(--space-4);
+  color: var(--deep-blue);
+  font-weight: 750;
+  overflow-wrap: anywhere;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.contact-details {
+  align-items: baseline;
+  max-width: 48rem;
+  padding-block-end: var(--space-4);
+  border-block-end: 1px solid var(--border);
+}
+
+.contact-email {
+  margin-block-start: 0;
+  unicode-bidi: plaintext;
+}
+
 html[lang="ar"] .section-kicker,
 html[lang="ar"] .group-heading,
 html[lang="ar"] .record-label,
